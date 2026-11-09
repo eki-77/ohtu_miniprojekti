@@ -1,4 +1,4 @@
-#Ryhmän pelisäännöt
+# Ryhmän pelisäännöt
 
 - Tehdään joka storystä oma branch.
 - Ennen kun aloitetaan koodin muokkaus, tehdään ensin git pull.
