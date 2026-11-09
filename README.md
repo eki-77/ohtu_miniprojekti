@@ -1,0 +1,2 @@
+# ohtu_miniprojekti
+Ohjelmistotuotantokurssin miniprojekti, Paras_ohturyhmä
