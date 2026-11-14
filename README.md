@@ -21,3 +21,5 @@ uv run python src/index.py
 ## Other
 
 - [Ryhmän pelisäännöt](https://github.com/eki-77/ohtu_miniprojekti/blob/main/pelisaannot.md)
+
+[![CI](https://github.com/eki-77/ohtu_miniprojekti/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/eki-77/ohtu_miniprojekti/actions/workflows/main.yml)
