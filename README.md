@@ -2,6 +2,8 @@
 
 Ohjelmistotuotantokurssin miniprojekti, Paras_ohturyhmä
 
+The app is running at https://route-ohjelmistotuotanto-lahiopetus-2026-4.ext.okd-cs-test-0.k8s.cs.helsinki.fi.
+
 ## Usage
 
 Run the app with
