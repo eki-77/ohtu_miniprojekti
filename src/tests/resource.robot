@@ -2,7 +2,7 @@
 Library  Browser 
 
 *** Variables ***
-${SERVER}        localhost:5000            # subject to change
+${SERVER}        localhost:5001            # subject to change
 ${DELAY}         500ms
 ${HOME_URL}      http://${SERVER}/
 ${BROWSER}       chromium
