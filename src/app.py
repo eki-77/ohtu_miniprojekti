@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -11,3 +11,8 @@ def index():
 @app.route("/new-reference")
 def new_reference():
     return render_template("new_reference.html")
+
+
+@app.route("/create-reference", methods=["POST"])
+def create_reference():
+    return request.form
