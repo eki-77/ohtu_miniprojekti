@@ -33,7 +33,14 @@ CREATE TABLE reference_authors (
     reference_id INTEGER NOT NULL,
     author_id INTEGER NOT NULL,
     position INTEGER NOT NULL,
-    -- Not ready
+    
+    PRIMARY KEY (reference_id, author_id),
+
+    FOREIGN KEY (reference_id)
+        REFERENCES references(id) ON DELETE CASCADE,
+
+    FOREIGN KEY (author_id)
+        REFERENCES authors(id) ON DELETE CASCADE
 );
 
 CREATE TABLE tags (
