@@ -2,8 +2,13 @@
 
 echo "Running tests"
 
-# käynnistetään Flask-palvelin taustalle
-uv run python3 src/index.py &
+# luodaan tietokanta
+uv run python src/db_helper.py
+
+echo "DB setup done"
+
+# käynnistetään Flask-palvelin taustalle testitilassa, jotta /reset-db on käytössä
+TEST_ENV=true uv run python3 src/index.py &
 
 echo "started Flask server"
 

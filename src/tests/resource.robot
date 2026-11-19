@@ -1,12 +1,13 @@
 *** Settings ***
-Library  Browser 
+Library  Browser
 
 *** Variables ***
 ${SERVER}        localhost:5001            # subject to change
 ${DELAY}         500ms
 ${HOME_URL}      http://${SERVER}/
+${RESET_URL}     http://${SERVER}/reset-db
 ${BROWSER}       chromium
-${HEADLESS}      false          
+${HEADLESS}      false
 
 *** Keywords ***
 Open And Configure Browser
@@ -18,5 +19,25 @@ Open And Configure Browser
     New Context
     New Page  about:blank
 
+Reset Database
+    Go To  ${RESET_URL}
+
 Go To Starting Page
     Go to  ${HOME_URL}
+
+Go To New Reference Page
+    Go To  ${HOME_URL}new-reference
+
+Fill In Reference Form
+    [Arguments]  ${key}  ${title}  ${author}  ${year}  ${publisher}=${EMPTY}
+    Fill Text  id=key        ${key}
+    Fill Text  id=title      ${title}
+    Fill Text  id=author     ${author}
+    Fill Text  id=year       ${year}
+    Fill Text  id=publisher  ${publisher}
+
+Submit Reference
+    Click  text="Create"
+
+Reference Should Be Created
+    Get Text  body  ==  Success
