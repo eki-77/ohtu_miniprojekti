@@ -24,3 +24,20 @@ Reset Database
 
 Go To Starting Page
     Go to  ${HOME_URL}
+
+Go To New Reference Page
+    Go To  ${HOME_URL}new-reference
+
+Fill In Reference Form
+    [Arguments]  ${key}  ${title}  ${author}  ${year}  ${publisher}=${EMPTY}
+    Fill Text  id=key        ${key}
+    Fill Text  id=title      ${title}
+    Fill Text  id=author     ${author}
+    Fill Text  id=year       ${year}
+    Fill Text  id=publisher  ${publisher}
+
+Submit Reference
+    Click  text="Create"
+
+Reference Should Be Created
+    Get Text  body  ==  Success
