@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 
+from references import add_reference
+
 app = Flask(__name__)
 
 
@@ -15,4 +17,13 @@ def new_reference():
 
 @app.route("/create-reference", methods=["POST"])
 def create_reference():
-    return request.form
+    data = request.form
+    add_reference(
+        data["key"],
+        "book",
+        data["title"],
+        data["year"],
+        data["author"],
+        data["publisher"],
+    )
+    return "Success"
