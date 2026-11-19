@@ -6,7 +6,13 @@ The app is running at https://route-ohjelmistotuotanto-lahiopetus-2026-4.ext.okd
 
 ## Usage
 
-Run the app with
+First create the database. Note that this destroys any existing data.
+
+```bash
+uv run python src/db_helper.py
+```
+
+Now run the app with
 
 ```bash
 uv run python src/index.py
