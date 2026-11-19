@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 
+from db_helper import reset_db
 from references import add_reference
 
 app = Flask(__name__)
@@ -27,3 +28,9 @@ def create_reference():
         data["publisher"],
     )
     return "Success"
+
+
+@app.route("/reset-db")
+def reset_database():
+    reset_db()
+    return "Database reset"

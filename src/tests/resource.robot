@@ -1,12 +1,13 @@
 *** Settings ***
-Library  Browser 
+Library  Browser
 
 *** Variables ***
 ${SERVER}        localhost:5001            # subject to change
 ${DELAY}         500ms
 ${HOME_URL}      http://${SERVER}/
+${RESET_URL}     http://${SERVER}/reset-db
 ${BROWSER}       chromium
-${HEADLESS}      false          
+${HEADLESS}      false
 
 *** Keywords ***
 Open And Configure Browser
@@ -17,6 +18,9 @@ Open And Configure Browser
     END
     New Context
     New Page  about:blank
+
+Reset Database
+    Go To  ${RESET_URL}
 
 Go To Starting Page
     Go to  ${HOME_URL}
