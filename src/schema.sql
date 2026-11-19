@@ -33,20 +33,18 @@ CREATE TABLE reference_authors (
     reference_id INTEGER NOT NULL,
     author_id INTEGER NOT NULL,
     position INTEGER NOT NULL,
-    
+
     PRIMARY KEY (reference_id, author_id),
 
     FOREIGN KEY (reference_id)
-        REFERENCES references(id) ON DELETE CASCADE,
+        REFERENCES all_references(id) ON DELETE CASCADE,
 
     FOREIGN KEY (author_id)
         REFERENCES authors(id) ON DELETE CASCADE
 );
 
-CREATE TABLE tags (
--- tags/categories
-);
-
-CREATE TABLE reference_tags (
--- tags/categories
-);
+-- CREATE TABLE tags (
+-- );
+--
+-- CREATE TABLE reference_tags (
+-- );
