@@ -26,6 +26,10 @@ uv run python src/index.py
 
 - Tests have been made to evaluate new features; tests are passing.
 
+## Backlogs
+
+- [Product and sprint backlogs](https://github.com/users/eki-77/projects/1/views/1)
+
 ## Other
 
 - [Ryhmän pelisäännöt](https://github.com/eki-77/ohtu_miniprojekti/blob/main/pelisaannot.md)
