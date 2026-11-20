@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, flash
 
 from db_helper import reset_db
 from references import add_reference, get_all_references
@@ -31,8 +31,9 @@ def create_reference():
         data["author"],
         data["publisher"],
     )
-    # jos onnistuu?
-    return "Success"
+    # if successful:
+    flash("Reference added successfully.")
+    return redirect("/")
 
 
 @app.route("/reset-db")

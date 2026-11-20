@@ -8,6 +8,7 @@ CREATE TABLE all_references (
     cite_type TEXT NOT NULL,
     title TEXT NOT NULL,
     year INTEGER,
+    status INTEGER DEFAULT 1 NOT NULL,
 
 -- Optionals:
     journal TEXT,
