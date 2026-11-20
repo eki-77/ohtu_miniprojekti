@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, flash
-
+from os import environ
 from db_helper import reset_db
 from references import add_reference, get_all_references
 
 app = Flask(__name__)
-
+app.secret_key = environ["APP_SECRET_KEY"]
 
 @app.route("/")
 def index():
