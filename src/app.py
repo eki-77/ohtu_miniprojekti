@@ -1,14 +1,18 @@
 from flask import Flask, render_template, request
 
 from db_helper import reset_db
-from references import add_reference
+from references import add_reference, get_all_references
 
 app = Flask(__name__)
 
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    references = get_all_references()
+    return render_template(
+        "index.html", 
+        references=references,
+        count=len(references))
 
 
 @app.route("/new-reference")
@@ -27,6 +31,7 @@ def create_reference():
         data["author"],
         data["publisher"],
     )
+    # jos onnistuu?
     return "Success"
 
 

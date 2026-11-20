@@ -1,8 +1,22 @@
-{% extends "layout.html" %} {% block title %} Miniproject {% endblock %} {%
-block body %}
+<!DOCTYPE html>
+<html>
 
-<h2>Miniproject</h2>
+<head>
+    <title>Miniproject</title>
+</head>
 
-<a href="new-reference">Create a new reference</a>
+<body>
 
-{% endblock %}
+    <h1>Miniproject</h1>
+
+    <a href="new-reference">Create a new reference</a> <br>
+
+    Current references count: {{count}} <br> 
+
+    {% for reference in references %}
+        {{reference.author}}. <em>{{reference.title}}</em>. {{reference.publisher}}, {{reference.year}} <br>
+    {% endfor %}
+
+</body>
+
+</html>

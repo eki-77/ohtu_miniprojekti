@@ -33,23 +33,17 @@ def add_or_get_author(name):
 
 
 def get_all_references(order_by="year"):
-    if order_by == "author":
-        sql = """
-            SELECT r.*
-            FROM all_references r
-            JOIN reference_authors ra ON r.id = ra.reference_id
-            JOIN authors a ON ra.author_id = a.id
-            WHERE ra.position = 1
-            ORDER BY a.name ASC
-        """
+    order = "a.name ASC" if order_by == "author" else "r.year DESC"
 
-    else:
-        sql = """
-            SELECT *
-            FROM all_references
-            ORDER BY year DESC
-        """
-
+    sql = f"""
+        SELECT r.*, a.name AS author
+        FROM all_references r
+        LEFT JOIN reference_authors ra
+            ON r.id = ra.reference_id AND ra.position = 1
+        LEFT JOIN authors a
+            ON ra.author_id = a.id
+        ORDER BY {order}
+    """
     return db.query(sql)
 
 
