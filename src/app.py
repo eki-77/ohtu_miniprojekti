@@ -1,13 +1,11 @@
-from os import getenv
-
 from flask import Flask, render_template, request
 
+from config import SECRET_KEY, TEST_ENV
 from db_helper import reset_db
 from references import add_reference
 
 app = Flask(__name__)
-
-test_env = getenv("TEST_ENV") == "true"
+app.secret_key = SECRET_KEY
 
 
 @app.route("/")
@@ -34,7 +32,7 @@ def create_reference():
     return "Success"
 
 
-if test_env:
+if TEST_ENV:
 
     @app.route("/reset-db")
     def reset_database():

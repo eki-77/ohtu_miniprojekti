@@ -1,13 +1,12 @@
 import sqlite3
-from os import getenv
 
 from flask import g
 
-DATABASE = getenv("DATABASE_PATH", "database.db")
+from config import DATABASE_PATH
 
 
 def get_connection():
-    con = sqlite3.connect(DATABASE)
+    con = sqlite3.connect(DATABASE_PATH)
     con.execute("PRAGMA foreign_keys = ON")
     con.row_factory = sqlite3.Row
     return con
