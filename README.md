@@ -4,6 +4,9 @@ Ohjelmistotuotantokurssin miniprojekti, Paras_ohturyhmä
 
 The app is running at https://route-ohjelmistotuotanto-lahiopetus-2026-4.ext.okd-cs-test-0.k8s.cs.helsinki.fi.
 
+[![CI](https://github.com/eki-77/ohtu_miniprojekti/actions/workflows/main.yml/badge.svg)](https://github.com/eki-77/ohtu_miniprojekti/actions/workflows/main.yml)
+[![Build and push Docker image](https://github.com/eki-77/ohtu_miniprojekti/actions/workflows/docker.yaml/badge.svg)](https://github.com/eki-77/ohtu_miniprojekti/actions/workflows/docker.yaml)
+
 ## Usage
 
 First create the database. Note that this destroys any existing data.
@@ -15,7 +18,7 @@ uv run python src/db_helper.py
 Now run the app with
 
 ```bash
-uv run APP_SECRET_KEY="sinun salainen avain" python src/index.py
+uv run python src/index.py
 ```
 
 ## Definition Of Done
@@ -34,5 +37,3 @@ uv run APP_SECRET_KEY="sinun salainen avain" python src/index.py
 
 - [Ryhmän pelisäännöt](https://github.com/eki-77/ohtu_miniprojekti/blob/main/pelisaannot.md)
 
-[![CI](https://github.com/eki-77/ohtu_miniprojekti/actions/workflows/main.yml/badge.svg)](https://github.com/eki-77/ohtu_miniprojekti/actions/workflows/main.yml)
-[![Build and push Docker image](https://github.com/eki-77/ohtu_miniprojekti/actions/workflows/docker.yaml/badge.svg)](https://github.com/eki-77/ohtu_miniprojekti/actions/workflows/docker.yaml)
