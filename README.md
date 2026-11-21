@@ -15,7 +15,7 @@ uv run python src/db_helper.py
 Now run the app with
 
 ```bash
-uv run python src/index.py
+uv run APP_SECRET_KEY="sinun salainen avain" python src/index.py
 ```
 
 ## Definition Of Done

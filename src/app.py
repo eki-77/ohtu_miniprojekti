@@ -2,14 +2,18 @@ from flask import Flask, render_template, request
 
 from config import SECRET_KEY, TEST_ENV
 from db_helper import reset_db
-from references import add_reference
+from references import add_reference, get_all_references
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    references = get_all_references()
+    return render_template(
+        "index.html", 
+        references=references,
+        count=len(references))
 
 
 @app.route("/new-reference")
@@ -28,7 +32,9 @@ def create_reference():
         data["author"],
         data["publisher"],
     )
-    return "Success"
+    # if successful:
+    flash("Reference added successfully.")
+    return redirect("/")
 
 
 if TEST_ENV:
