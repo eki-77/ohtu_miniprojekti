@@ -1,9 +1,13 @@
+from os import getenv
+
 from flask import Flask, render_template, request
 
 from db_helper import reset_db
 from references import add_reference
 
 app = Flask(__name__)
+
+test_env = getenv("TEST_ENV") == "true"
 
 
 @app.route("/")
@@ -30,7 +34,9 @@ def create_reference():
     return "Success"
 
 
-@app.route("/reset-db")
-def reset_database():
-    reset_db()
-    return "Database reset"
+if test_env:
+
+    @app.route("/reset-db")
+    def reset_database():
+        reset_db()
+        return "Database reset"
