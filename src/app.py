@@ -7,7 +7,6 @@ from references import add_reference
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
