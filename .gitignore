@@ -7,3 +7,4 @@ playwright-log.txt
 report.html
 results
 secret.env
+browser/

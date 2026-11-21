@@ -19,9 +19,6 @@ Open And Configure Browser
     New Context
     New Page  about:blank
 
-Reset Database
-    Go To  ${RESET_URL}
-
 Go To Starting Page
     Go to  ${HOME_URL}
 
@@ -40,4 +37,9 @@ Submit Reference
     Click  text="Create"
 
 Reference Should Be Created
-    Get Text  body  ==  Success
+    ${page}=  Get Text  body
+    Should Contain  ${page}  Reference added successfully.
+    Should Contain  ${page}  Example Book
+
+Reset Database
+    Go To  ${RESET_URL}
