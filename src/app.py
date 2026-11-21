@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, flash, redirect, render_template, request
 
 from config import SECRET_KEY, TEST_ENV
 from db_helper import reset_db
