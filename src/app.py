@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 
 from config import SECRET_KEY, TEST_ENV
 from db_helper import reset_db
-from references import add_reference
+from references import add_reference, get_all_references
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
