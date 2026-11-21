@@ -1,6 +1,7 @@
 from flask import Flask, flash, redirect, render_template, request
 
 from config import SECRET_KEY, TEST_ENV
+from datetime import datetime
 from db_helper import reset_db
 from references import add_reference, get_all_references
 
@@ -24,6 +25,25 @@ def new_reference():
 @app.route("/create-reference", methods=["POST"])
 def create_reference():
     data = request.form
+
+    #Jos kaikken teidon lisääminen ei ole pakollista, tämä tulisi editoida:
+    if any(not value.strip() for value in data.values()):
+        flash("All fields are required.")
+        return redirect("/new-reference")
+
+    references = get_all_references()
+    for reference in references:
+        if reference["citation_key"] == data["key"]:
+            flash("This key already exists.")
+            return redirect("/new-reference")
+
+    if not data["year"].isdigit() or len(data["year"]) > 4:
+        flash("Year must be numbers and a maximum of 4 digits.")
+        return redirect("/new-reference")
+    if int(data["year"]) > datetime.now().year: 
+        flash("Year cannot be in the future.")
+        return redirect("/new-reference")
+
     add_reference(
         data["key"],
         "book",

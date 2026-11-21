@@ -2,6 +2,11 @@
 {% block body %}
     <h2>Create a new reference</h2>
 
+    {% for message in get_flashed_messages() %}
+        <p> {{message}} </p>
+    {% endfor %}
+
+
     <form action="/create-reference" method="post">
         <label for="key">Citation key:</label>
         <input type="text" id="key" name="key" />
