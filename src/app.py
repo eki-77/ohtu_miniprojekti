@@ -1,12 +1,37 @@
-from flask import Flask, flash, redirect, render_template, request
+from flask import Flask, flash, redirect, render_template, request, abort
 
 from config import SECRET_KEY, TEST_ENV
 from datetime import datetime
 from db_helper import reset_db
-from references import add_reference, get_all_references
+from references import add_reference, get_all_references, get_a_reference, update_a_reference
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+
+
+def input_valid(data, reference_id=None):
+    required_fields = ("key", "title", "author", "year")
+    if any(not data.get(field, "").strip() for field in required_fields):
+        flash("All fields are required.")
+        return False
+
+    references = get_all_references()
+    for reference in references:
+        if reference["id"] != reference_id and reference["citation_key"] == data["key"].strip():
+            flash("This key already exists.")
+            return False
+
+    year = data["year"].strip()
+    if not year.isdecimal() or len(year) > 4:
+        flash("Year must be numbers and a maximum of 4 digits.")
+        return False
+    
+    if int(year) > datetime.now().year:
+        flash("Year cannot be in the future.")
+        return False
+
+    return True
+
 
 @app.route("/")
 def index():
