@@ -36,6 +36,13 @@ def create_reference():
         if reference["citation_key"] == data["key"]:
             flash("This key already exists.")
             return redirect("/new-reference")
+    if len(data["title"]) > 200:
+        flash("Title can't be more than 200 marks")
+        return redirect("/new-reference")
+    
+    if len(data["publisher"]) > 100:
+        flash("Publisher can't be more than 100 marks")
+        return redirect("/new-reference")
 
     if not data["year"].isdigit() or len(data["year"]) > 4:
         flash("Year must be numbers and a maximum of 4 digits.")
