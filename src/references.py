@@ -41,11 +41,21 @@ def get_all_references(order_by="year"):
         LEFT JOIN reference_authors ra
             ON r.id = ra.reference_id AND ra.position = 1
         LEFT JOIN authors a
-            ON ra.author_id = a.id
+            ON ra.author_id = a.id    
+        WHERE r.status = 1
         ORDER BY {order}
     """
     return db.query(sql)
 
-
 # call get_all_references() for year order
 # call get_all_references("author") for autho order
+
+def get_a_reference(reference_id):
+    sql = """
+            SELECT r.*
+            FROM recipes r
+            WHERE r.id = ? AND r.status = 1
+        """
+
+    return db.query(sql, [reference_id])[0]
+
