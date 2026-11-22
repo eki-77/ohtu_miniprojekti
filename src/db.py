@@ -12,7 +12,7 @@ def get_connection():
     return con
 
 
-def execute(sql, params=[]):
+def execute(sql, params=[]): # pylint: disable=dangerous-default-value
     con = get_connection()
     result = con.execute(sql, params)
     con.commit()
@@ -24,7 +24,7 @@ def last_insert_id():
     return g.last_insert_id
 
 
-def query(sql, params=[]):
+def query(sql, params=[]): # pylint: disable=dangerous-default-value
     con = get_connection()
     result = con.execute(sql, params).fetchall()
     con.close()

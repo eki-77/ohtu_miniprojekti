@@ -1,7 +1,7 @@
+from datetime import datetime
 from flask import Flask, flash, redirect, render_template, request
 
 from config import SECRET_KEY, TEST_ENV
-from datetime import datetime
 from db_helper import reset_db
 from references import add_reference, get_all_references
 
@@ -39,7 +39,7 @@ def create_reference():
     if len(data["title"]) > 200:
         flash("Title can't be more than 200 marks")
         return redirect("/new-reference")
-    
+
     if len(data["publisher"]) > 100:
         flash("Publisher can't be more than 100 marks")
         return redirect("/new-reference")
@@ -50,7 +50,7 @@ def create_reference():
     if not data["year"].isdigit() or len(data["year"]) > 4:
         flash("Year must be numbers and a maximum of 4 digits.")
         return redirect("/new-reference")
-    if int(data["year"]) > datetime.now().year: 
+    if int(data["year"]) > datetime.now().year:
         flash("Year cannot be in the future.")
         return redirect("/new-reference")
 
