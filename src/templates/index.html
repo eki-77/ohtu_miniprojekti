@@ -16,11 +16,18 @@
     <a href="/new-reference">Create a new reference</a> <br>
 
     <p>
-    Current references count: {{count}}. Click to edit. <br> 
+    Current references count: {{count}}. Click the reference to edit. <br> 
     </p>
 
     <p>
     {% for reference in references %}
+        <form action="/delete-reference/{{ reference.id }}" method="POST" style="display:inline">
+        <button type="submit"
+                onclick="return confirm('Delete this reference?')">
+                X
+            </button>
+        </form>
+
         <a href="/edit/{{reference.id}}" style="text-decoration:none;color:black" >
         {{reference.author}}. <em>{{reference.title}}</em>. {{reference.publisher}}, {{reference.year}} 
         </a>

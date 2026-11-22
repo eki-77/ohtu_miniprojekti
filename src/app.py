@@ -3,7 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, abort
 from config import SECRET_KEY, TEST_ENV
 from datetime import datetime
 from db_helper import reset_db
-from references import add_reference, get_all_references, get_a_reference, update_a_reference
+from references import add_reference, get_all_references, get_a_reference, update_a_reference, delete_reference
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -93,9 +93,10 @@ def edit_reference(reference_id):
         return redirect("/")
 
 
-@app.route("/delete-reference/<int:reference_id>", methods=["GET", "POST"])
-def delete_reference(reference_id):
-    pass
+@app.route("/delete-reference/<int:reference_id>", methods=["POST"])
+def delete_reference_route(reference_id):
+    delete_reference(reference_id)
+    return redirect("/")
 
 
 if TEST_ENV:

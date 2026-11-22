@@ -96,3 +96,26 @@ def update_a_reference(reference_id, citation_key, title, year, author, publishe
         db.execute(sql, [reference_id, author_id])
 
     return reference_id
+
+def delete_reference(reference_id):
+    # Author connected to the reference
+    sql = """
+        SELECT author_id 
+        FROM reference_authors
+        WHERE reference_id = ?
+        """
+    rows = db.query(sql, [reference_id])
+    
+    sql = "DELETE FROM all_references WHERE id = ?"
+    db.execute(sql, [reference_id])
+
+    # Delete only authors that aren't connected to any references
+    for row in rows:
+        sql = """
+            DELETE FROM authors
+            WHERE id = ?
+            AND id NOT IN (
+                SELECT author_id FROM reference_authors
+            )
+        """
+        db.execute(sql, [row["author_id"]])
