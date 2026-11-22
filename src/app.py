@@ -51,38 +51,55 @@ def new_reference():
 def create_reference():
     data = request.form
 
-    #Jos kaikken teidon lisääminen ei ole pakollista, tämä tulisi editoida:
-    if any(not value.strip() for value in data.values()):
-        flash("All fields are required.")
-        return redirect("/new-reference")
-
-    references = get_all_references()
-    for reference in references:
-        if reference["citation_key"] == data["key"]:
-            flash("This key already exists.")
-            return redirect("/new-reference")
-
-    if not data["year"].isdigit() or len(data["year"]) > 4:
-        flash("Year must be numbers and a maximum of 4 digits.")
-        return redirect("/new-reference")
-    if int(data["year"]) > datetime.now().year: 
-        flash("Year cannot be in the future.")
+    if not input_valid(data):
         return redirect("/new-reference")
 
     add_reference(
-        data["key"],
+        data["key"].strip(),
         "book",
-        data["title"],
-        data["year"],
-        data["author"],
-        data["publisher"],
+        data["title"].strip(),
+        data["year"].strip(),
+        data["author"].strip(),
+        data.get("publisher", "").strip() or None,
     )
-    # if successful:
+
     flash("Reference added successfully.")
     return redirect("/")
 
 
+@app.route("/edit/<int:reference_id>", methods=["GET", "POST"])
+def edit_reference(reference_id):
+    reference = get_a_reference(reference_id)
+
+    if not reference:
+        abort(404)
+
+    if request.method == "GET":
+        return render_template("edit.html", reference=reference)
+
+    if request.method == "POST":
+        data = request.form
+        if not input_valid(data, reference_id):
+            return redirect(f"/edit/{reference_id}")
+
+        citation_key = data["key"].strip()
+        title = data["title"].strip()
+        author = data["author"].strip()
+        publisher = data.get("publisher", "").strip() or None
+        year = data["year"].strip()
+
+        update_a_reference(reference_id, citation_key, title, year, author, publisher)
+        flash("Reference updated successfully.")
+        return redirect("/")
+
+
+@app.route("/delete-reference/<int:reference_id>", methods=["GET", "POST"])
+def delete_reference(reference_id):
+    pass
+
+
 if TEST_ENV:
+
 
     @app.route("/reset-db")
     def reset_database():

@@ -52,10 +52,47 @@ def get_all_references(order_by="year"):
 
 def get_a_reference(reference_id):
     sql = """
-            SELECT r.*
-            FROM recipes r
+            SELECT r.*, a.name AS author
+            FROM all_references r
+            LEFT JOIN reference_authors ra
+                ON r.id = ra.reference_id AND ra.position = 1
+            LEFT JOIN authors a
+                ON ra.author_id = a.id
             WHERE r.id = ? AND r.status = 1
         """
 
-    return db.query(sql, [reference_id])[0]
+    rows = db.query(sql, [reference_id])
+    return rows[0] if rows else None
 
+
+def update_a_reference(reference_id, citation_key, title, year, author, publisher=None):
+    if get_a_reference(reference_id) is None:
+        return False
+
+    author_id = add_or_get_author(author)
+    sql = """
+        UPDATE all_references
+        SET citation_key = ?, title = ?, year = ?, publisher = ?
+        WHERE id = ? AND status = 1
+    """
+    db.execute(sql, [citation_key, title, year, publisher, reference_id])
+
+    author_link = db.query(
+        "SELECT 1 FROM reference_authors WHERE reference_id = ? AND position = 1",
+        [reference_id],
+    )
+    if author_link:
+        sql = """
+            UPDATE reference_authors
+            SET author_id = ?
+            WHERE reference_id = ? AND position = 1
+        """
+        db.execute(sql, [author_id, reference_id])
+    else:
+        sql = """
+            INSERT INTO reference_authors (reference_id, author_id, position)
+            VALUES (?, ?, 1)
+        """
+        db.execute(sql, [reference_id, author_id])
+
+    return reference_id
