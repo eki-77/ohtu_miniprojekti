@@ -44,6 +44,9 @@ def create_reference():
         flash("Publisher can't be more than 100 marks")
         return redirect("/new-reference")
 
+    if int(data["year"]) < 0:
+        flash("Year cannot be negative.")
+        return redirect("/new-reference")
     if not data["year"].isdigit() or len(data["year"]) > 4:
         flash("Year must be numbers and a maximum of 4 digits.")
         return redirect("/new-reference")
