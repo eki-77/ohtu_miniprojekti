@@ -104,7 +104,8 @@ def update_a_reference(reference_id, citation_key, cite_type, title,
             SET citation_key = ?, cite_type = ?, title = ?, year = ?, journal = ?, volume = ?, number = ?
             WHERE id = ? AND status = 1
         """
-        db.execute(sql, [citation_key, cite_type, title, year, journal, volume, number, reference_id])
+        db.execute(sql, [citation_key, cite_type, title, year,
+            journal, volume, number, reference_id])
 
     author_link = db.query(
         "SELECT 1 FROM reference_authors WHERE reference_id = ? AND position = 1",
