@@ -21,6 +21,13 @@ Canceling Reference Deletion Keeps It
     Should Contain  ${page}  Example Book
     Should Contain  ${page}  Current references count: 1
 
+Deleting An Article Reference Removes It
+    Create Article Reference  article  Example Article  Example Author  2020  Example Journal  Volume 1  Number 1
+    Delete Reference  Example Article  ACCEPT
+    ${page}=  Get Text  body
+    Should Not Contain  ${page}  Example Article
+    Should Contain  ${page}  Current references count: 0
+
 *** Keywords ***
 Create Reference
     [Arguments]  ${key}  ${title}  ${author}  ${year}  ${publisher}

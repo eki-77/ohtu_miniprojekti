@@ -12,6 +12,7 @@ Creating A Reference Succeeds
 Creating An Article Reference Succeeds
     Create Article Reference  example  Example Publication  Example Author  2026  Example Journal  Example Volume  Example Number
     Reference Should Be Created
+    Article Reference Should Be Listed  Example Author  Example Publication  Example Journal  2026  Example Volume  Example Number
 
 When Creating Duplicate Citation Keys Are Rejected
     Create Reference  duplicate  First Book  First Author  2020  Publisher
@@ -48,12 +49,6 @@ Create Reference
     [Arguments]  ${key}  ${title}  ${author}  ${year}  ${publisher}
     Go To New Reference Page
     Fill In Reference Form  ${key}  ${title}  ${author}  ${year}  ${publisher}
-    Submit Reference
-
-Create Article Reference
-    [Arguments]  ${key}  ${title}  ${author}  ${year}  ${journal}  ${volume}  ${number}
-    Go To New Article Reference Page
-    Fill In Article Reference Form  ${key}  ${title}  ${author}  ${year}  ${journal}  ${volume}  ${number}
     Submit Reference
 
 Page Should Contain

@@ -46,6 +46,12 @@ Fill In Article Reference Form
     Fill Text  id=volume     ${volume}
     Fill Text  id=number     ${number}
 
+Create Article Reference
+    [Arguments]  ${key}  ${title}  ${author}  ${year}  ${journal}  ${volume}  ${number}
+    Go To New Article Reference Page
+    Fill In Article Reference Form  ${key}  ${title}  ${author}  ${year}  ${journal}  ${volume}  ${number}
+    Submit Reference
+
 Submit Reference
     Click  text="Create"
 
@@ -56,3 +62,18 @@ Reference Should Be Created
 
 Reset Database
     Go To  ${RESET_URL}
+
+Article Reference Should Be Listed
+    [Arguments]  ${author}  ${title}  ${journal}  ${year}  ${volume}=${EMPTY}  ${number}=${EMPTY}
+    Go To Starting Page
+    ${page}=  Get Text  body
+    Should Contain  ${page}  ${author}.
+    Should Contain  ${page}  ${title}
+    Should Contain  ${page}  ${journal}
+    Should Contain  ${page}  ${year}
+    IF  $volume != ''
+        Should Contain  ${page}  ${volume}
+    END
+    IF  $number != ''
+        Should Contain  ${page}  ${number}
+    END
