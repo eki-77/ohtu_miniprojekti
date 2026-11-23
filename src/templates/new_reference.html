@@ -3,25 +3,24 @@
     <h2>Create a new reference</h2>
 
     {% for message in get_flashed_messages() %}
-        <p> {{message}} </p>
+        <p>{{ message }}</p>
     {% endfor %}
-
 
     <form action="/create-reference" method="post">
         <label for="key">Citation key:</label>
-        <input type="text" id="key" name="key" required/>
+        <input type="text" id="key" name="key" required />
         <br />
         <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required/>
+        <input type="text" id="title" name="title" maxlength="200" required />
         <br />
         <label for="author">Author:</label>
-        <input type="text" id="author" name="author" required/>
+        <input type="text" id="author" name="author" required />
         <br />
         <label for="publisher">Publisher:</label>
-        <input type="text" id="publisher" name="publisher"/>
+        <input type="text" id="publisher" name="publisher" maxlength="100" />
         <br />
         <label for="year">Year:</label>
-        <input type="number" id="year" name="year" required/>
+        <input type="number" id="year" name="year" maxlength="4" required />
         <br />
         <button type="submit">Create</button>
     </form>

@@ -1,9 +1,16 @@
-from flask import Flask, flash, redirect, render_template, request, abort
+from datetime import datetime
+
+from flask import Flask, abort, flash, redirect, render_template, request
 
 from config import SECRET_KEY, TEST_ENV
-from datetime import datetime
 from db_helper import reset_db
-from references import add_reference, get_all_references, get_a_reference, update_a_reference, delete_reference
+from references import (
+    add_reference,
+    delete_reference,
+    get_a_reference,
+    get_all_references,
+    update_a_reference,
+)
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
@@ -15,17 +22,32 @@ def input_valid(data, reference_id=None):
         flash("All fields are required.")
         return False
 
+    if len(data["title"].strip()) > 200:
+        flash("Title can't be more than 200 marks")
+        return False
+
+    if len(data.get("publisher", "").strip()) > 100:
+        flash("Publisher can't be more than 100 marks")
+        return False
+
     references = get_all_references()
     for reference in references:
-        if reference["id"] != reference_id and reference["citation_key"] == data["key"].strip():
+        if (
+            reference["id"] != reference_id
+            and reference["citation_key"] == data["key"].strip()
+        ):
             flash("This key already exists.")
             return False
 
     year = data["year"].strip()
+    if year.startswith("-") and year[1:].isdecimal():
+        flash("Year cannot be negative.")
+        return False
+
     if not year.isdecimal() or len(year) > 4:
         flash("Year must be numbers and a maximum of 4 digits.")
         return False
-    
+
     if int(year) > datetime.now().year:
         flash("Year cannot be in the future.")
         return False
@@ -36,10 +58,7 @@ def input_valid(data, reference_id=None):
 @app.route("/")
 def index():
     references = get_all_references()
-    return render_template(
-        "index.html", 
-        references=references,
-        count=len(references))
+    return render_template("index.html", references=references, count=len(references))
 
 
 @app.route("/new-reference")
@@ -77,20 +96,19 @@ def edit_reference(reference_id):
     if request.method == "GET":
         return render_template("edit.html", reference=reference)
 
-    if request.method == "POST":
-        data = request.form
-        if not input_valid(data, reference_id):
-            return redirect(f"/edit/{reference_id}")
+    data = request.form
+    if not input_valid(data, reference_id):
+        return redirect(f"/edit/{reference_id}")
 
-        citation_key = data["key"].strip()
-        title = data["title"].strip()
-        author = data["author"].strip()
-        publisher = data.get("publisher", "").strip() or None
-        year = data["year"].strip()
+    citation_key = data["key"].strip()
+    title = data["title"].strip()
+    author = data["author"].strip()
+    publisher = data.get("publisher", "").strip() or None
+    year = data["year"].strip()
 
-        update_a_reference(reference_id, citation_key, title, year, author, publisher)
-        flash("Reference updated successfully.")
-        return redirect("/")
+    update_a_reference(reference_id, citation_key, title, year, author, publisher)
+    flash("Reference updated successfully.")
+    return redirect("/")
 
 
 @app.route("/delete-reference/<int:reference_id>", methods=["POST"])
@@ -100,7 +118,6 @@ def delete_reference_route(reference_id):
 
 
 if TEST_ENV:
-
 
     @app.route("/reset-db")
     def reset_database():

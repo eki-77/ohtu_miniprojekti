@@ -36,7 +36,7 @@ Editing Rejects Invalid Years
     FOR  ${year}  ${error}  IN
     ...  12345  Year must be numbers and a maximum of 4 digits.
     ...  3000   Year cannot be in the future.
-    ...  -1     Year must be numbers and a maximum of 4 digits.
+    ...  -1     Year cannot be negative.
         Edit Reference  Example Book  Updated Book  Example Author  ${year}  Publisher
         Page Should Contain  ${error}
         Reference Details Should Be Listed  Example Author  Example Book  Publisher  2020

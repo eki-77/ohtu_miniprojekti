@@ -36,7 +36,7 @@ When Creating Future Years Are Rejected
 
 When Creating Negative Years Are Rejected
     Create Reference  negative-year  Book With Negative Year  Example Author  -1  Example Publisher
-    Should Be Rejected With  Year must be numbers and a maximum of 4 digits.
+    Should Be Rejected With  Year cannot be negative.
     Reference Count Should Be  0
 
 *** Keywords ***

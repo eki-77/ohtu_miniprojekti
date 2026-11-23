@@ -105,7 +105,7 @@ def delete_reference(reference_id):
         WHERE reference_id = ?
         """
     rows = db.query(sql, [reference_id])
-    
+
     sql = "DELETE FROM all_references WHERE id = ?"
     db.execute(sql, [reference_id])
 
