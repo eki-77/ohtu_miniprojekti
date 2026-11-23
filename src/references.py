@@ -1,14 +1,33 @@
 import db
 
 
-def add_reference(citation_key, cite_type, title, year, author, publisher=None):
+def add_reference(
+    citation_key,
+    cite_type,
+    title,
+    year,
+    author,
+    publisher=None,
+    journal=None,
+    volume=None,
+    number=None
+    ):
     author_id = add_or_get_author(author)
-    sql = """
-        INSERT INTO all_references
-        (citation_key, cite_type, title, year, publisher)
-        VALUES (?, ?, ?, ?, ?)
-    """
-    db.execute(sql, [citation_key, cite_type, title, year, publisher])
+    if cite_type == "book":
+        sql = """
+            INSERT INTO all_references
+            (citation_key, cite_type, title, year, publisher)
+            VALUES (?, ?, ?, ?, ?)
+        """
+        db.execute(sql, [citation_key, cite_type, title, year, publisher])
+    else:
+        sql = """
+            INSERT INTO all_references
+            (citation_key, cite_type, title, year, journal, volume, number)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """
+        db.execute(sql, [citation_key, cite_type, title, year, journal, volume, number])
+
     reference_id = db.last_insert_id()
     sql = """
         INSERT INTO reference_authors

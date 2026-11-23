@@ -65,6 +65,9 @@ def index():
 def new_reference():
     return render_template("new_reference.html")
 
+@app.route("/new-article-reference")
+def new_article_reference():
+    return render_template("new_article_reference.html")
 
 @app.route("/create-reference", methods=["POST"])
 def create_reference():
@@ -73,15 +76,30 @@ def create_reference():
     if not input_valid(data):
         return redirect("/new-reference")
 
-    add_reference(
-        data["key"].strip(),
-        "book",
-        data["title"].strip(),
-        data["year"].strip(),
-        data["author"].strip(),
-        data.get("publisher", "").strip() or None,
-    )
-
+    if data["type"].strip() == "book":
+        add_reference(
+            data["key"].strip(),
+            "book",
+            data["title"].strip(),
+            data["year"].strip(),
+            data["author"].strip(),
+            data.get("publisher", "").strip() or None,
+        )
+    elif data["type"].strip() == "article":
+        add_reference(
+            data["key"].strip(),
+            "article",
+            data["title"].strip(),
+            data["year"].strip(),
+            data["author"].strip(),
+            None,
+            data["journal"].strip(),
+            data.get("volume", "").strip() or None,
+            data.get("number", "").strip() or None,
+        )
+    else:
+        flash("incorrect reference type")
+        return redirect("/")
     flash("Reference added successfully.")
     return redirect("/")
 

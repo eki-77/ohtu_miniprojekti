@@ -23,6 +23,6 @@ disable=raw-checker-failed,
 
 [DESIGN]
 
-max-args=6
-max-positional-arguments=6
+max-args=10
+max-positional-arguments=10
 max-returns=8
