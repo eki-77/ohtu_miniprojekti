@@ -84,17 +84,27 @@ def get_a_reference(reference_id):
     return rows[0] if rows else None
 
 
-def update_a_reference(reference_id, citation_key, title, year, author, publisher=None):
+def update_a_reference(reference_id, citation_key, cite_type, title,
+    year, author, publisher=None, journal=None, volume=None, number=None):
     if get_a_reference(reference_id) is None:
         return False
 
     author_id = add_or_get_author(author)
-    sql = """
-        UPDATE all_references
-        SET citation_key = ?, title = ?, year = ?, publisher = ?
-        WHERE id = ? AND status = 1
-    """
-    db.execute(sql, [citation_key, title, year, publisher, reference_id])
+
+    if cite_type == "book":
+        sql = """
+            UPDATE all_references
+            SET citation_key = ?, cite_type = ?, title = ?, year = ?, publisher = ?
+            WHERE id = ? AND status = 1
+        """
+        db.execute(sql, [citation_key, cite_type, title, year, publisher, reference_id])
+    else:
+        sql = """
+            UPDATE all_references
+            SET citation_key = ?, cite_type = ?, title = ?, year = ?, journal = ?, volume = ?, number = ?
+            WHERE id = ? AND status = 1
+        """
+        db.execute(sql, [citation_key, cite_type, title, year, journal, volume, number, reference_id])
 
     author_link = db.query(
         "SELECT 1 FROM reference_authors WHERE reference_id = ? AND position = 1",

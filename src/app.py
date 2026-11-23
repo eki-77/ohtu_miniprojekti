@@ -121,6 +121,7 @@ def edit_reference(reference_id):
         return redirect(f"/edit/{reference_id}")
 
     citation_key = data["key"].strip()
+    cite_type = data["type"].strip()
     title = data["title"].strip()
     author = data["author"].strip()
     publisher = data.get("publisher", "").strip() or None
@@ -129,7 +130,7 @@ def edit_reference(reference_id):
     volume = data.get("volume", "").strip() or None
     number = data.get("number", "").strip() or None
 
-    update_a_reference(reference_id, citation_key, title, year, author, publisher)
+    update_a_reference(reference_id, citation_key, cite_type, title, year, author, publisher, journal, volume, number)
     flash("Reference updated successfully.")
     return redirect("/")
 
