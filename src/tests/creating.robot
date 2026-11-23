@@ -6,7 +6,11 @@ Test Setup      Reset Database
 
 *** Test Cases ***
 Creating A Reference Succeeds
-    Create Reference  example  Example Book  Example Author  2026  Example Publisher
+    Create Reference  example  Example Publication  Example Author  2026  Example Publisher
+    Reference Should Be Created
+
+Creating An Article Reference Succeeds
+    Create Article Reference  example  Example Publication  Example Author  2026  Example Journal  Example Volume  Example Number
     Reference Should Be Created
 
 When Creating Duplicate Citation Keys Are Rejected
@@ -44,6 +48,12 @@ Create Reference
     [Arguments]  ${key}  ${title}  ${author}  ${year}  ${publisher}
     Go To New Reference Page
     Fill In Reference Form  ${key}  ${title}  ${author}  ${year}  ${publisher}
+    Submit Reference
+
+Create Article Reference
+    [Arguments]  ${key}  ${title}  ${author}  ${year}  ${journal}  ${volume}  ${number}
+    Go To New Article Reference Page
+    Fill In Article Reference Form  ${key}  ${title}  ${author}  ${year}  ${journal}  ${volume}  ${number}
     Submit Reference
 
 Page Should Contain

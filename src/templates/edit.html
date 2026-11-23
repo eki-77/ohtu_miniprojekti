@@ -16,6 +16,8 @@
 
         <form action="/edit/{{reference.id}}" method="post">
 
+            <input type="hidden" id="type" name="type" value="{{reference.cite_type}}">
+
             <label for="key">Citation key:</label>
             <textarea type="text" id="key" name="key" required>{{reference.citation_key}}</textarea>
             <br />

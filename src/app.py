@@ -17,17 +17,20 @@ app.secret_key = SECRET_KEY
 
 
 def input_valid(data, reference_id=None):
-    required_fields = ("key", "title", "author", "year")
+    if data["type"] == "book":
+        required_fields = ("key", "title", "author", "year")
+    else:
+        required_fields = ("key", "title", "author", "year", "journal")
     if any(not data.get(field, "").strip() for field in required_fields):
         flash("All fields are required.")
         return False
 
     if len(data["title"].strip()) > 200:
-        flash("Title can't be more than 200 marks")
+        flash("Title can't be more than 200 characters")
         return False
 
     if len(data.get("publisher", "").strip()) > 100:
-        flash("Publisher can't be more than 100 marks")
+        flash("Publisher can't be more than 100 characters")
         return False
 
     references = get_all_references()
@@ -107,12 +110,11 @@ def create_reference():
 @app.route("/edit/<int:reference_id>", methods=["GET", "POST"])
 def edit_reference(reference_id):
     reference = get_a_reference(reference_id)
-
     if not reference:
         abort(404)
-
+    edit_page = "edit.html" if reference["cite_type"] == "book" else "edit_article.html"
     if request.method == "GET":
-        return render_template("edit.html", reference=reference)
+        return render_template(edit_page, reference=reference)
 
     data = request.form
     if not input_valid(data, reference_id):
@@ -122,7 +124,10 @@ def edit_reference(reference_id):
     title = data["title"].strip()
     author = data["author"].strip()
     publisher = data.get("publisher", "").strip() or None
+    journal = data.get("journal", "").strip() or None
     year = data["year"].strip()
+    volume = data.get("volume", "").strip() or None
+    number = data.get("number", "").strip() or None
 
     update_a_reference(reference_id, citation_key, title, year, author, publisher)
     flash("Reference updated successfully.")
