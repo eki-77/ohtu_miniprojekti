@@ -1,20 +1,64 @@
 from datetime import datetime
-from flask import Flask, flash, redirect, render_template, request
+
+from flask import Flask, abort, flash, redirect, render_template, request
 
 from config import SECRET_KEY, TEST_ENV
 from db_helper import reset_db
-from references import add_reference, get_all_references
+from references import (
+    add_reference,
+    delete_reference,
+    get_a_reference,
+    get_all_references,
+    update_a_reference,
+)
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
+
+def input_valid(data, reference_id=None):
+    required_fields = ("key", "title", "author", "year")
+    if any(not data.get(field, "").strip() for field in required_fields):
+        flash("All fields are required.")
+        return False
+
+    if len(data["title"].strip()) > 200:
+        flash("Title can't be more than 200 marks")
+        return False
+
+    if len(data.get("publisher", "").strip()) > 100:
+        flash("Publisher can't be more than 100 marks")
+        return False
+
+    references = get_all_references()
+    for reference in references:
+        if (
+            reference["id"] != reference_id
+            and reference["citation_key"] == data["key"].strip()
+        ):
+            flash("This key already exists.")
+            return False
+
+    year = data["year"].strip()
+    if year.startswith("-") and year[1:].isdecimal():
+        flash("Year cannot be negative.")
+        return False
+
+    if not year.isdecimal() or len(year) > 4:
+        flash("Year must be numbers and a maximum of 4 digits.")
+        return False
+
+    if int(year) > datetime.now().year:
+        flash("Year cannot be in the future.")
+        return False
+
+    return True
+
+
 @app.route("/")
 def index():
     references = get_all_references()
-    return render_template(
-        "index.html", 
-        references=references,
-        count=len(references))
+    return render_template("index.html", references=references, count=len(references))
 
 
 @app.route("/new-reference")
@@ -26,44 +70,50 @@ def new_reference():
 def create_reference():
     data = request.form
 
-    #Jos kaikken teidon lisääminen ei ole pakollista, tämä tulisi editoida:
-    if any(not value.strip() for value in data.values()):
-        flash("All fields are required.")
-        return redirect("/new-reference")
-
-    references = get_all_references()
-    for reference in references:
-        if reference["citation_key"] == data["key"]:
-            flash("This key already exists.")
-            return redirect("/new-reference")
-    if len(data["title"]) > 200:
-        flash("Title can't be more than 200 marks")
-        return redirect("/new-reference")
-
-    if len(data["publisher"]) > 100:
-        flash("Publisher can't be more than 100 marks")
-        return redirect("/new-reference")
-
-    if int(data["year"]) < 0:
-        flash("Year cannot be negative.")
-        return redirect("/new-reference")
-    if not data["year"].isdigit() or len(data["year"]) > 4:
-        flash("Year must be numbers and a maximum of 4 digits.")
-        return redirect("/new-reference")
-    if int(data["year"]) > datetime.now().year:
-        flash("Year cannot be in the future.")
+    if not input_valid(data):
         return redirect("/new-reference")
 
     add_reference(
-        data["key"],
+        data["key"].strip(),
         "book",
-        data["title"],
-        data["year"],
-        data["author"],
-        data["publisher"],
+        data["title"].strip(),
+        data["year"].strip(),
+        data["author"].strip(),
+        data.get("publisher", "").strip() or None,
     )
-    # if successful:
+
     flash("Reference added successfully.")
+    return redirect("/")
+
+
+@app.route("/edit/<int:reference_id>", methods=["GET", "POST"])
+def edit_reference(reference_id):
+    reference = get_a_reference(reference_id)
+
+    if not reference:
+        abort(404)
+
+    if request.method == "GET":
+        return render_template("edit.html", reference=reference)
+
+    data = request.form
+    if not input_valid(data, reference_id):
+        return redirect(f"/edit/{reference_id}")
+
+    citation_key = data["key"].strip()
+    title = data["title"].strip()
+    author = data["author"].strip()
+    publisher = data.get("publisher", "").strip() or None
+    year = data["year"].strip()
+
+    update_a_reference(reference_id, citation_key, title, year, author, publisher)
+    flash("Reference updated successfully.")
+    return redirect("/")
+
+
+@app.route("/delete-reference/<int:reference_id>", methods=["POST"])
+def delete_reference_route(reference_id):
+    delete_reference(reference_id)
     return redirect("/")
 
 

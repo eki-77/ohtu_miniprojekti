@@ -41,11 +41,81 @@ def get_all_references(order_by="year"):
         LEFT JOIN reference_authors ra
             ON r.id = ra.reference_id AND ra.position = 1
         LEFT JOIN authors a
-            ON ra.author_id = a.id
+            ON ra.author_id = a.id    
+        WHERE r.status = 1
         ORDER BY {order}
     """
     return db.query(sql)
 
-
 # call get_all_references() for year order
 # call get_all_references("author") for autho order
+
+def get_a_reference(reference_id):
+    sql = """
+            SELECT r.*, a.name AS author
+            FROM all_references r
+            LEFT JOIN reference_authors ra
+                ON r.id = ra.reference_id AND ra.position = 1
+            LEFT JOIN authors a
+                ON ra.author_id = a.id
+            WHERE r.id = ? AND r.status = 1
+        """
+
+    rows = db.query(sql, [reference_id])
+    return rows[0] if rows else None
+
+
+def update_a_reference(reference_id, citation_key, title, year, author, publisher=None):
+    if get_a_reference(reference_id) is None:
+        return False
+
+    author_id = add_or_get_author(author)
+    sql = """
+        UPDATE all_references
+        SET citation_key = ?, title = ?, year = ?, publisher = ?
+        WHERE id = ? AND status = 1
+    """
+    db.execute(sql, [citation_key, title, year, publisher, reference_id])
+
+    author_link = db.query(
+        "SELECT 1 FROM reference_authors WHERE reference_id = ? AND position = 1",
+        [reference_id],
+    )
+    if author_link:
+        sql = """
+            UPDATE reference_authors
+            SET author_id = ?
+            WHERE reference_id = ? AND position = 1
+        """
+        db.execute(sql, [author_id, reference_id])
+    else:
+        sql = """
+            INSERT INTO reference_authors (reference_id, author_id, position)
+            VALUES (?, ?, 1)
+        """
+        db.execute(sql, [reference_id, author_id])
+
+    return reference_id
+
+def delete_reference(reference_id):
+    # Author connected to the reference
+    sql = """
+        SELECT author_id 
+        FROM reference_authors
+        WHERE reference_id = ?
+        """
+    rows = db.query(sql, [reference_id])
+
+    sql = "DELETE FROM all_references WHERE id = ?"
+    db.execute(sql, [reference_id])
+
+    # Delete only authors that aren't connected to any references
+    for row in rows:
+        sql = """
+            DELETE FROM authors
+            WHERE id = ?
+            AND id NOT IN (
+                SELECT author_id FROM reference_authors
+            )
+        """
+        db.execute(sql, [row["author_id"]])
