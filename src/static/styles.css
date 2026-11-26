@@ -48,8 +48,9 @@
 .gray {
   color: rgb(138, 141, 145);
   font-style: italic;
+  font-size: 15px;
 }
 
 .smaller {
-  font-size: 10px;
+  font-size: 12px;
 }
