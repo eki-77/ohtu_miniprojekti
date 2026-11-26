@@ -3,7 +3,7 @@
 
 <head>
     <title>Miniproject</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
@@ -15,18 +15,19 @@
         <p> {{message}} </p>
     {% endfor %}
 
-    <a href="/new-reference">Create a new reference</a> <br>
+    <a href="/new-reference" class="no-link-dark">✚ Add a new reference</a> <br>
 
     <p>
     Current references count: {{count}}. Click the reference to edit. <br> 
     </p>
-
+    <div class="centered">
+        
     <p>
     {% for reference in references %}
         <form action="/delete-reference/{{ reference.id }}" method="POST" style="display:inline">
-        <button type="submit"
+        <button class="button" type="submit"
                 onclick="return confirm('Delete this reference?')">
-                X
+                ❌
             </button>
         </form>
 
@@ -36,7 +37,7 @@
         <br>
     {% endfor %}
     </p>
-
+    </div>
 </body>
 
 </html>
