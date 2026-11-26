@@ -37,3 +37,9 @@
   color: #4787e7;
   font-weight: bold;
 }
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
