@@ -15,13 +15,14 @@
         <p> {{message}} </p>
     {% endfor %}
 
-    <a href="/new-reference" class="no-link-dark center">✚ Add a new reference</a> <br>
+    <p class="center">Current references count: {{count}}.</p>
 
-    <p>
-    Current references count: {{count}}. Click the reference to edit. <br> 
-    </p>
+    <a href="/new-reference" class="no-link-dark center">✚ Add a new reference</a>
+    <p class="no-link-dark center">⬇︎ Download BibTeX file</p>
+
+    <p class="center gray">Click the reference to edit it.</p>
+
     <div class="centered">
-        
     <p>
     {% for reference in references %}
         <form action="/delete-reference/{{ reference.id }}" method="POST" style="display:inline">

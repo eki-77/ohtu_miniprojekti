@@ -42,4 +42,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 5xp;
+}
+
+.gray {
+  color: rgb(138, 141, 145);
+  font-style: italic;
+}
+
+.smaller {
+  font-size: 10px;
 }
