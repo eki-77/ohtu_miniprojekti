@@ -6,8 +6,13 @@ Test Setup      Reset Database
 
 *** Test Cases ***
 Creating A Reference Succeeds
-    Create Reference  example  Example Book  Example Author  2026  Example Publisher
+    Create Reference  example  Example Publication  Example Author  2026  Example Publisher
     Reference Should Be Created
+
+Creating An Article Reference Succeeds
+    Create Article Reference  example  Example Publication  Example Author  2026  Example Journal  Example Volume  Example Number
+    Reference Should Be Created
+    Article Reference Should Be Listed  Example Author  Example Publication  Example Journal  2026  Example Volume  Example Number
 
 When Creating Duplicate Citation Keys Are Rejected
     Create Reference  duplicate  First Book  First Author  2020  Publisher

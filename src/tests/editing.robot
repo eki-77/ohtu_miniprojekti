@@ -12,6 +12,14 @@ Editing A Reference Updates Its Details
     Reference Details Should Be Listed  Updated Author  Updated Book  Updated Publisher  2021
     Page Should Not Contain  Example Book
 
+Editing An Article Reference Updates Its Details
+    Create Article Reference  article  Example Article  Example Author  2020  Example Journal  Volume 1  Number 1
+    Edit Article Reference  Example Article  Updated Article  Updated Author  2021  Updated Journal  Volume 2  Number 3
+    Page Should Contain  Reference updated successfully.
+    Article Reference Should Be Listed  Updated Author  Updated Article  Updated Journal  2021  Volume 2  Number 3
+    Page Should Not Contain  Example Article
+    Page Should Not Contain  Example Journal
+
 Editing Can Remove The Optional Publisher
     Create Reference  example  Example Book  Example Author  2020  Example Publisher
     Edit Reference  Example Book  Example Book  Example Author  2020  ${EMPTY}
@@ -54,6 +62,13 @@ Edit Reference
     Go To Starting Page
     Click  text=${original_title}
     Fill In Reference Form  ${key}  ${title}  ${author}  ${year}  ${publisher}
+    Click  text="Proceed with changes"
+
+Edit Article Reference
+    [Arguments]  ${original_title}  ${title}  ${author}  ${year}  ${journal}  ${volume}  ${number}  ${key}=article
+    Go To Starting Page
+    Click  text=${original_title}
+    Fill In Article Reference Form  ${key}  ${title}  ${author}  ${year}  ${journal}  ${volume}  ${number}
     Click  text="Proceed with changes"
 
 Page Should Contain

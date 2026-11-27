@@ -17,17 +17,20 @@ app.secret_key = SECRET_KEY
 
 
 def input_valid(data, reference_id=None):
-    required_fields = ("key", "title", "author", "year")
+    if data["type"] == "book":
+        required_fields = ("key", "title", "author", "year")
+    else:
+        required_fields = ("key", "title", "author", "year", "journal")
     if any(not data.get(field, "").strip() for field in required_fields):
         flash("All fields are required.")
         return False
 
     if len(data["title"].strip()) > 200:
-        flash("Title can't be more than 200 marks")
+        flash("Title can't be more than 200 characters")
         return False
 
     if len(data.get("publisher", "").strip()) > 100:
-        flash("Publisher can't be more than 100 marks")
+        flash("Publisher can't be more than 100 characters")
         return False
 
     references = get_all_references()
@@ -65,23 +68,42 @@ def index():
 def new_reference():
     return render_template("new_reference.html")
 
+@app.route("/new-article-reference")
+def new_article_reference():
+    return render_template("new_article_reference.html")
 
 @app.route("/create-reference", methods=["POST"])
 def create_reference():
     data = request.form
 
-    if not input_valid(data):
-        return redirect("/new-reference")
-
-    add_reference(
-        data["key"].strip(),
-        "book",
-        data["title"].strip(),
-        data["year"].strip(),
-        data["author"].strip(),
-        data.get("publisher", "").strip() or None,
-    )
-
+    if data["type"].strip() == "book":
+        if not input_valid(data):
+            return redirect("/new-reference")
+        add_reference(
+            data["key"].strip(),
+            "book",
+            data["title"].strip(),
+            data["year"].strip(),
+            data["author"].strip(),
+            data.get("publisher", "").strip() or None,
+        )
+    elif data["type"].strip() == "article":
+        if not input_valid(data):
+            return redirect("/new-article-reference")
+        add_reference(
+            data["key"].strip(),
+            "article",
+            data["title"].strip(),
+            data["year"].strip(),
+            data["author"].strip(),
+            None,
+            data["journal"].strip(),
+            data.get("volume", "").strip() or None,
+            data.get("number", "").strip() or None,
+        )
+    else:
+        flash("incorrect reference type")
+        return redirect("/")
     flash("Reference added successfully.")
     return redirect("/")
 
@@ -89,24 +111,28 @@ def create_reference():
 @app.route("/edit/<int:reference_id>", methods=["GET", "POST"])
 def edit_reference(reference_id):
     reference = get_a_reference(reference_id)
-
     if not reference:
         abort(404)
-
+    edit_page = "edit.html" if reference["cite_type"] == "book" else "edit_article.html"
     if request.method == "GET":
-        return render_template("edit.html", reference=reference)
+        return render_template(edit_page, reference=reference)
 
     data = request.form
     if not input_valid(data, reference_id):
         return redirect(f"/edit/{reference_id}")
 
     citation_key = data["key"].strip()
+    cite_type = data["type"].strip()
     title = data["title"].strip()
     author = data["author"].strip()
     publisher = data.get("publisher", "").strip() or None
+    journal = data.get("journal", "").strip() or None
     year = data["year"].strip()
+    volume = data.get("volume", "").strip() or None
+    number = data.get("number", "").strip() or None
 
-    update_a_reference(reference_id, citation_key, title, year, author, publisher)
+    update_a_reference(reference_id, citation_key, cite_type, title, year,
+        author, publisher, journal, volume, number)
     flash("Reference updated successfully.")
     return redirect("/")
 
