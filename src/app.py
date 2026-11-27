@@ -76,10 +76,9 @@ def new_article_reference():
 def create_reference():
     data = request.form
 
-    if not input_valid(data):
-        return redirect("/new-reference")
-
     if data["type"].strip() == "book":
+        if not input_valid(data):
+            return redirect("/new-reference")
         add_reference(
             data["key"].strip(),
             "book",
@@ -89,6 +88,8 @@ def create_reference():
             data.get("publisher", "").strip() or None,
         )
     elif data["type"].strip() == "article":
+        if not input_valid(data):
+            return redirect("/new-article-reference")
         add_reference(
             data["key"].strip(),
             "article",
