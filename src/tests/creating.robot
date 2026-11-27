@@ -14,6 +14,30 @@ Creating An Article Reference Succeeds
     Reference Should Be Created
     Article Reference Should Be Listed  Example Author  Example Publication  Example Journal  2026  Example Volume  Example Number
 
+Invalid Article Reference Retains Entered Values
+    Go To New Article Reference Page
+    Fill In Article Reference Form  retained-article  Article With Invalid Year  Article Author  3000  Article Journal  Article Volume  Article Number
+    Submit Reference
+    Should Be Rejected With  Year cannot be in the future.
+    Form Field Should Have Value  key  retained-article
+    Form Field Should Have Value  title  Article With Invalid Year
+    Form Field Should Have Value  author  Article Author
+    Form Field Should Have Value  journal  Article Journal
+    Form Field Should Have Value  year  3000
+    Form Field Should Have Value  volume  Article Volume
+    Form Field Should Have Value  number  Article Number
+
+Invalid Book Reference Retains Entered Values
+    Go To New Reference Page
+    Fill In Reference Form  retained-book  Book With Invalid Year  Book Author  3000  Book Publisher
+    Submit Reference
+    Should Be Rejected With  Year cannot be in the future.
+    Form Field Should Have Value  key  retained-book
+    Form Field Should Have Value  title  Book With Invalid Year
+    Form Field Should Have Value  author  Book Author
+    Form Field Should Have Value  year  3000
+    Form Field Should Have Value  publisher  Book Publisher
+
 When Creating Duplicate Citation Keys Are Rejected
     Create Reference  duplicate  First Book  First Author  2020  Publisher
     Create Reference  duplicate  Second Book  Second Author  2021  Publisher
@@ -64,3 +88,8 @@ Reference Count Should Be
 Should Be Rejected With
     [Arguments]  ${error}
     Page Should Contain  ${error}
+
+Form Field Should Have Value
+    [Arguments]  ${field}  ${expected}
+    ${value}=  Get Attribute  id=${field}  value
+    Should Be Equal  ${value}  ${expected}
