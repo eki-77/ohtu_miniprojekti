@@ -88,7 +88,7 @@ def create_reference():
             data["author"].strip(),
             data.get("publisher", "").strip() or None,
         )
-        
+
     elif data["type"].strip() == "article":
         if not input_valid(data):
             return render_template("new_article_reference.html", values=data)
