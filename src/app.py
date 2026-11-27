@@ -66,11 +66,11 @@ def index():
 
 @app.route("/new-reference")
 def new_reference():
-    return render_template("new_reference.html")
+    return render_template("new_reference.html", values={})
 
 @app.route("/new-article-reference")
 def new_article_reference():
-    return render_template("new_article_reference.html")
+    return render_template("new_article_reference.html", values={})
 
 @app.route("/create-reference", methods=["POST"])
 def create_reference():
@@ -78,7 +78,8 @@ def create_reference():
 
     if data["type"].strip() == "book":
         if not input_valid(data):
-            return redirect("/new-reference")
+            return render_template("new_reference.html", values=data)
+
         add_reference(
             data["key"].strip(),
             "book",
@@ -87,9 +88,11 @@ def create_reference():
             data["author"].strip(),
             data.get("publisher", "").strip() or None,
         )
+
     elif data["type"].strip() == "article":
         if not input_valid(data):
-            return redirect("/new-article-reference")
+            return render_template("new_article_reference.html", values=data)
+
         add_reference(
             data["key"].strip(),
             "article",
@@ -119,7 +122,21 @@ def edit_reference(reference_id):
 
     data = request.form
     if not input_valid(data, reference_id):
-        return redirect(f"/edit/{reference_id}")
+        form_reference = dict(reference)
+        form_reference.update(
+            {
+                "citation_key": data.get("key", ""),
+                "cite_type": data.get("type", reference["cite_type"]),
+                "title": data.get("title", ""),
+                "author": data.get("author", ""),
+                "year": data.get("year", ""),
+                "publisher": data.get("publisher", ""),
+                "journal": data.get("journal", ""),
+                "volume": data.get("volume", ""),
+                "number": data.get("number", ""),
+            }
+        )
+        return render_template(edit_page, reference=form_reference)
 
     citation_key = data["key"].strip()
     cite_type = data["type"].strip()
