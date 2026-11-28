@@ -1,6 +1,8 @@
 from datetime import datetime
 
-from flask import Flask, abort, flash, redirect, render_template, request
+from flask import Flask, abort, flash, redirect, render_template, request, Response
+
+from bibtex import generate_text
 
 from config import SECRET_KEY, TEST_ENV
 from db_helper import reset_db
@@ -141,6 +143,19 @@ def edit_reference(reference_id):
 def delete_reference_route(reference_id):
     delete_reference(reference_id)
     return redirect("/")
+
+@app.route("/bibtex_page")
+def bibtex_page():
+    references = get_all_references()
+    return render_template("bibtex_file.html", references=references)
+
+@app.route("/download-bibtex")
+def download_bibtex():
+    references = get_all_references()
+    bibtex_text = generate_text(references)
+
+    return Response(bibtex_text, mimetype="application/x-bibtex",
+                    headers={"Content-Disposition": 'attachment; filename="references.bib"'})
 
 
 if TEST_ENV:

@@ -16,7 +16,7 @@ Open And Configure Browser
     ELSE
         New Browser  browser=${BROWSER}  headless=False  slowMo=${DELAY}
     END
-    New Context
+    New Context  acceptDownloads=True
     New Page  about:blank
 
 Go To Starting Page
