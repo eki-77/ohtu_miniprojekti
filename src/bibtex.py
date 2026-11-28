@@ -1,40 +1,3 @@
-def generate_file(references):
-    with open("references.bib", "w") as file:
-        for reference in references:
-            if reference["cite_type"] == "book":
-                key = reference["citation_key"]
-                title = reference["title"]
-                author = reference["author"]
-                publisher = reference["publisher"]
-                year = reference["year"]
-
-                s = "@book{%s,\n    author = {%s},\n    title = {%s}," %(key, author, title)
-                if publisher and publisher != "None":
-                    s += "\n    publisher = {%s}," %publisher
-                s += "\n    year = {%s}\n}\n\n" %year
-
-            elif reference["cite_type"] == "article":
-                key = reference["citation_key"]
-                title = reference["title"]
-                author = reference["author"]
-                journal = reference["journal"]
-                year = reference["year"]
-                volume = reference["volume"]
-                number = reference["number"]
-
-                s = "@article{%s,\n    author = {%s},\n    title = {%s}," %(key, author, title)
-                s += "\n    journal = {%s},\n    year = {%s}" %(journal, year)
-                if volume and volume != "None":
-                    s += ",\n    volume = {%s}" %(volume)
-                if number and number != "None":
-                    s += ",\n    number = {%s}" %(number)
-                s += "\n}\n\n"
-
-            else:
-                pass
-
-            file.write(s)
-
 def generate_text(references):
     entries = []
 
@@ -64,7 +27,7 @@ def generate_text(references):
             if number and number != "None":
                 s += ",\n    number = {%s}" %(number)
             s += "\n}\n\n"
-        
+
         entries.append(s)
 
     return "\n".join(entries)
