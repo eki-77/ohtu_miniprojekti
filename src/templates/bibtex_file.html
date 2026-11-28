@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+    <a href="{{ url_for('download_bibtex') }}">Download .bib file</a>
+
+    {% for reference in references %}
+
+    {% if reference.cite_type == "book" %}
+
+        <p>
+            @book&#123;{{reference.citation_key}},<br>
+            &emsp;author = &#123;{{reference.author}}&#125;,<br>
+            &emsp;title = &#123;{{reference.title}}&#125;,<br>
+
+            {% if reference.publisher and reference.publisher != "None" %}
+            &emsp;publisher = &#123;{{reference.publisher}}&#125;,<br>
+            {% endif %}
+
+            &emsp;year = &#123;{{reference.year}}&#125;<br>
+            &#125;<br>
+        </p>
+
+    {% elif reference.cite_type == "article" %}
+
+        <p>
+            @article&#123;{{reference.citation_key}},<br>
+            &emsp;author = &#123;{{reference.author}}&#125;,<br>
+            &emsp;title = &#123;{{reference.title}}&#125;,<br>
+            &emsp;journal = &#123;{{reference.journal}}&#125;,<br>
+            &emsp;year = &#123;{{reference.year}}&#125;
+
+            {% if reference.volume and reference.volume != "None" %}
+            ,<br>
+            &emsp;volume = &#123;{{reference.volume}}&#125;,<br>
+            {% endif %}
+
+            {% if reference.number and reference.number != "None" %}
+            &emsp;number = &#123;{{reference.number}}&#125;
+            {% endif %}
+
+            <br>&#125;<br>
+        </p>
+
+    {% endif %}    
+
+    {% endfor %}
+
+</html>
